@@ -81,7 +81,11 @@ def main():
     ap.add_argument("--title", default="Same render. Only the timing changed.")
     ap.add_argument("--realtime-only", action="store_true", help="skip the half-speed and frame-by-frame sections")
     a = ap.parse_args()
-    L, R = rgb_frames(a.left), rgb_frames(a.right)
+    global PH  # keep the source aspect ratio (panel width fixed)
+    wh = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height",
+                         "-of", "csv=p=0", a.left], capture_output=True, text=True).stdout.strip().split(",")
+    PH = int(round(PW * int(wh[1]) / int(wh[0]) / 2)) * 2
+    L, R = rgb_frames(a.left, PW, PH), rgb_frames(a.right, PW, PH)
     T = min(len(L), len(R))
     chL, chR = changes(a.left)[:T], changes(a.right)[:T]
     fonts = (ImageFont.truetype(FONT, 17), ImageFont.truetype(FONT, 22), ImageFont.truetype(FONT, 24))
