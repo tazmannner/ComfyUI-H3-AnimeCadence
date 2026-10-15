@@ -29,14 +29,14 @@ H3 already chose, and keep the sharpest frame of each held drawing.
 
 These nodes fix **timing**. Fast-motion **smearing/melting** is a different problem; the fix for that
 is the de-rope pipeline in [ComfyUI-MAINodes](https://github.com/matlowai/ComfyUI-MAINodes). Workflow 06
-chains the two.
+chains the two (07 without SAM).
 
 ### What's ours, and what isn't
 
 - **Ours:** the five nodes in this repo (re-timing with auto 2s/3s detection and sharpest-frame pick,
   character-only holds, the SAM tracker, the measure node, the experimental hold guide), the example
   workflows, the demo/analysis tools, and the test results in "What we learned".
-- **Not ours:** the de-rope that fixes smearing is **MAINodes** (matlowai), used unmodified in workflow 06,
+- **Not ours:** the de-rope that fixes smearing is **MAINodes** (matlowai), used unmodified in workflows 06 and 07,
   with settings that follow MAINodes' own recommended fast flow. The framing of the problem, cadence as the
   thing video models get wrong and the way we measure it, comes from **Alvdansen Labs' "Animating on Twos"**.
   Masks come from **SAM / SAM2** (Meta, via Kijai's nodes), the tiny VAE from **madebyollin**, the video
@@ -48,7 +48,7 @@ chains the two.
 
 | node | what it does | example workflow |
 |---|---|---|
-| **Anime Cadence: Hold on 2s/3s** | re-times any clip onto 2s/3s; `auto` follows the hold length + phase H3 already chose; keeps the sharpest frame of each hold | [01](example_workflows/01_anime_cadence_on_a_clip.json), [02](example_workflows/02_h3_t2v_plus_anime_cadence.json) |
+| **Anime Cadence: Hold on 2s/3s** | re-times any clip onto 2s/3s; `auto` follows the hold length + phase H3 already chose; keeps the sharpest frame of each hold | [01](example_workflows/01_anime_cadence_on_a_clip.json), [02](example_workflows/02_h3_t2v_plus_anime_cadence.json), [07](example_workflows/07_derope_plus_anime_cadence.json) |
 | **Anime Cadence: Character Only** | holds only the masked character on 2s/3s; background/camera stay on ones | [03](example_workflows/03_character_cadence_sam2.json), [04](example_workflows/04_character_cadence_sam_v1.json), [06](example_workflows/06_derope_plus_character_cadence.json) |
 | **Character Mask Track (SAM)** | per-frame character mask from one click, using the original Segment Anything (SAM v1) | [04](example_workflows/04_character_cadence_sam_v1.json) |
 | **Anime Cadence: Measure** | prints how much of a clip is on 1s / 2s / 3s | [01](example_workflows/01_anime_cadence_on_a_clip.json) |
@@ -93,7 +93,7 @@ one click as a fraction of the frame, uses the SAM v1 checkpoint in `models/sams
 
 ![SAM2 (top) vs SAM v1 tracker (bottom)](assets/sam2_vs_samv1_masks.png)
 
-### De-rope + Character Cadence (workflow 06)
+### De-rope + Anime Cadence (workflows 06 and 07)
 
 ![raw / character hold / de-rope / de-rope + character hold](assets/demo_derope_plus_character_cadence.gif)
 
@@ -104,8 +104,9 @@ This part is **MAINodes' de-rope pipeline**, used as published. Pass 1 is a norm
 finds spans that move too fast for H3's 4-frame latent tokens (their explanation of why H3 smears), slows
 them down, and pass 2 redraws them. The settings follow MAINodes' recommended fast flow (turbo LoRA on
 pass 2; we used 0.8 strength, an 8-step schedule and `inject 0.5`, which kept pass 1's acting in our tests).
-Exact Recover returns to real time. Our part is the last step: SAM2 + Anime Cadence: Character Only put
-the character on 2s. About 2× the time of a single render.
+Exact Recover returns to real time. Our part is the last step: in **06**, SAM2 + Anime Cadence: Character
+Only put the character on 2s; **07** is the simpler version with no SAM, where Anime Cadence holds the whole
+frame (best when the camera is mostly still). About 2× the time of a single render.
 
 ### H3 Hold Guide (experimental)
 
@@ -132,7 +133,7 @@ Restart ComfyUI. Core nodes need nothing beyond ComfyUI. Optional, per workflow:
 | workflows 03, 06 (SAM2 masks) | [kijai/ComfyUI-segment-anything-2](https://github.com/kijai/ComfyUI-segment-anything-2) (downloads `sam2.1_hiera_base_plus`, ~160 MB, on first run) |
 | workflow 04 (Character Mask Track) | `pip install segment-anything` and a SAM v1 checkpoint (e.g. `sam_vit_b_01ec64.pth`) in `models/sams` |
 | workflow 05 (Hold Guide) | `taeh3.safetensors` from [madebyollin/taehv](https://github.com/madebyollin/taehv) in `models/vae_approx` (needs the version with an encoder) |
-| workflow 06 (de-rope) | [matlowai/ComfyUI-MAINodes](https://github.com/matlowai/ComfyUI-MAINodes) + any H3 turbo LoRA |
+| workflows 06, 07 (de-rope) | [matlowai/ComfyUI-MAINodes](https://github.com/matlowai/ComfyUI-MAINodes) + any H3 turbo LoRA |
 
 ## What we learned testing H3
 
@@ -201,7 +202,7 @@ This work stands on other people's generosity. Big thanks to:
 All code in this repository was written for this project; no code was copied from the projects below.
 
 - **ComfyUI-MAINodes** by matlowai (GPL-3.0). Its de-rope pipeline (H3 Jerk Oracle, Time Smear, V2V Init,
-  Inject Schedule, Exact Recover) is what fixes fast-motion smearing; example workflow 06 *uses* those nodes
+  Inject Schedule, Exact Recover) is what fixes fast-motion smearing; example workflows 06 and 07 *use* those nodes
   unmodified (install MAINodes separately). The explanation that H3 smears because one latent token spans
   four frames is theirs.
 - **"Animating on Twos"** by Minta Carlson and Timothy Bielec, Alvdansen Labs (text CC BY 4.0). Ideas used
@@ -221,5 +222,5 @@ All code in this repository was written for this project; no code was copied fro
 
 ## License
 
-[MIT](LICENSE). Example workflow 06 uses nodes from ComfyUI-MAINodes (GPL-3.0), which you install
+[MIT](LICENSE). Example workflows 06 and 07 use nodes from ComfyUI-MAINodes (GPL-3.0), which you install
 separately; no MAINodes code is included in this repository.
