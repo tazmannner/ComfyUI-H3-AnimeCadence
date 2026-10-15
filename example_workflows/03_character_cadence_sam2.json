@@ -1,6 +1,6 @@
 {
  "last_node_id": 10,
- "last_link_id": 10,
+ "last_link_id": 11,
  "nodes": [
   {
    "id": 1,
@@ -45,7 +45,9 @@
     {
      "name": "audio",
      "type": "AUDIO",
-     "links": []
+     "links": [
+      11
+     ]
     },
     {
      "name": "video_info",
@@ -414,7 +416,7 @@
     {
      "name": "audio",
      "type": "AUDIO",
-     "link": null
+     "link": 11
     },
     {
      "name": "meta_batch",
@@ -557,6 +559,14 @@
    9,
    0,
    "IMAGE"
+  ],
+  [
+   11,
+   1,
+   2,
+   9,
+   1,
+   "AUDIO"
   ]
  ],
  "groups": [],

@@ -1,6 +1,6 @@
 {
- "last_node_id": 33,
- "last_link_id": 46,
+ "last_node_id": 35,
+ "last_link_id": 51,
  "nodes": [
   {
    "id": 1,
@@ -23,7 +23,7 @@
      "type": "MODEL",
      "links": [
       1,
-      23
+      25
      ]
     }
    ],
@@ -56,7 +56,7 @@
      "type": "CLIP",
      "links": [
       2,
-      20
+      22
      ]
     }
    ],
@@ -91,9 +91,9 @@
      "links": [
       3,
       13,
-      18,
-      21,
-      34
+      20,
+      23,
+      36
      ]
     }
    ],
@@ -298,7 +298,7 @@
      "type": "SAMPLER",
      "links": [
       9,
-      30
+      32
      ]
     }
    ],
@@ -395,7 +395,8 @@
      "type": "LATENT",
      "links": [
       12,
-      14
+      14,
+      16
      ]
     },
     {
@@ -441,8 +442,8 @@
      "name": "IMAGE",
      "type": "IMAGE",
      "links": [
-      15,
-      44
+      17,
+      46
      ]
     }
    ],
@@ -453,10 +454,83 @@
   },
   {
    "id": 12,
-   "type": "H3JerkOracle",
+   "type": "VAELoader",
+   "pos": [
+    60,
+    894
+   ],
+   "size": [
+    380,
+    106
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "VAE",
+     "type": "VAE",
+     "links": [
+      15
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "VAELoader"
+   },
+   "widgets_values": [
+    "minimax_h3_audio_vae_fp32.safetensors"
+   ]
+  },
+  {
+   "id": 13,
+   "type": "VAEDecodeAudio",
    "pos": [
     1740,
     232
+   ],
+   "size": [
+    380,
+    132
+   ],
+   "flags": {},
+   "order": 4,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "samples",
+     "type": "LATENT",
+     "link": 14
+    },
+    {
+     "name": "vae",
+     "type": "VAE",
+     "link": 15
+    }
+   ],
+   "outputs": [
+    {
+     "name": "AUDIO",
+     "type": "AUDIO",
+     "links": [
+      47,
+      49,
+      51
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "VAEDecodeAudio"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 14,
+   "type": "H3JerkOracle",
+   "pos": [
+    1740,
+    404
    ],
    "size": [
     380,
@@ -469,7 +543,7 @@
     {
      "name": "samples",
      "type": "LATENT",
-     "link": 14
+     "link": 16
     }
    ],
    "outputs": [
@@ -477,7 +551,7 @@
      "name": "hold_map",
      "type": "STRING",
      "links": [
-      16
+      18
      ]
     },
     {
@@ -528,7 +602,7 @@
    "title": "MAINodes: where is motion too fast"
   },
   {
-   "id": 13,
+   "id": 15,
    "type": "H3TimeSmear",
    "pos": [
     2160,
@@ -545,12 +619,12 @@
     {
      "name": "images",
      "type": "IMAGE",
-     "link": 15
+     "link": 17
     },
     {
      "name": "hold_map",
      "type": "STRING",
-     "link": 16,
+     "link": 18,
      "widget": {
       "name": "hold_map"
      }
@@ -561,21 +635,21 @@
      "name": "images",
      "type": "IMAGE",
      "links": [
-      17
+      19
      ]
     },
     {
      "name": "hold_map_used",
      "type": "STRING",
      "links": [
-      36
+      38
      ]
     },
     {
      "name": "length",
      "type": "INT",
      "links": [
-      22
+      24
      ]
     },
     {
@@ -599,7 +673,7 @@
    "title": "MAINodes: slow the fast spans"
   },
   {
-   "id": 14,
+   "id": 16,
    "type": "VAEEncode",
    "pos": [
     2580,
@@ -616,12 +690,12 @@
     {
      "name": "pixels",
      "type": "IMAGE",
-     "link": 17
+     "link": 19
     },
     {
      "name": "vae",
      "type": "VAE",
-     "link": 18
+     "link": 20
     }
    ],
    "outputs": [
@@ -629,7 +703,7 @@
      "name": "LATENT",
      "type": "LATENT",
      "links": [
-      19
+      21
      ]
     }
    ],
@@ -639,7 +713,7 @@
    "widgets_values": []
   },
   {
-   "id": 15,
+   "id": 17,
    "type": "H3V2VInit",
    "pos": [
     3000,
@@ -656,7 +730,7 @@
     {
      "name": "samples",
      "type": "LATENT",
-     "link": 19
+     "link": 21
     },
     {
      "name": "oracle_samples",
@@ -679,7 +753,7 @@
      "name": "LATENT",
      "type": "LATENT",
      "links": [
-      32
+      34
      ]
     }
    ],
@@ -700,7 +774,7 @@
    ]
   },
   {
-   "id": 16,
+   "id": 18,
    "type": "MiniMaxH3ImageToVideo",
    "pos": [
     2580,
@@ -717,17 +791,17 @@
     {
      "name": "clip",
      "type": "CLIP",
-     "link": 20
+     "link": 22
     },
     {
      "name": "vae",
      "type": "VAE",
-     "link": 21
+     "link": 23
     },
     {
      "name": "length",
      "type": "INT",
-     "link": 22,
+     "link": 24,
      "widget": {
       "name": "length"
      }
@@ -748,7 +822,7 @@
      "name": "positive",
      "type": "CONDITIONING",
      "links": [
-      26
+      28
      ]
     },
     {
@@ -768,7 +842,7 @@
    ]
   },
   {
-   "id": 17,
+   "id": 19,
    "type": "LoraLoaderModelOnly",
    "pos": [
     480,
@@ -785,7 +859,7 @@
     {
      "name": "model",
      "type": "MODEL",
-     "link": 23
+     "link": 25
     }
    ],
    "outputs": [
@@ -793,7 +867,7 @@
      "name": "MODEL",
      "type": "MODEL",
      "links": [
-      24
+      26
      ]
     }
    ],
@@ -807,7 +881,7 @@
    "title": "turbo LoRA for pass 2 (any H3 turbo LoRA)"
   },
   {
-   "id": 18,
+   "id": 20,
    "type": "MiniMaxH3SigmaShift",
    "pos": [
     900,
@@ -824,7 +898,7 @@
     {
      "name": "model",
      "type": "MODEL",
-     "link": 24
+     "link": 26
     }
    ],
    "outputs": [
@@ -832,8 +906,8 @@
      "name": "MODEL",
      "type": "MODEL",
      "links": [
-      25,
-      27
+      27,
+      29
      ]
     }
    ],
@@ -846,7 +920,7 @@
    ]
   },
   {
-   "id": 19,
+   "id": 21,
    "type": "BasicGuider",
    "pos": [
     3000,
@@ -863,12 +937,12 @@
     {
      "name": "model",
      "type": "MODEL",
-     "link": 25
+     "link": 27
     },
     {
      "name": "conditioning",
      "type": "CONDITIONING",
-     "link": 26
+     "link": 28
     }
    ],
    "outputs": [
@@ -876,7 +950,7 @@
      "name": "GUIDER",
      "type": "GUIDER",
      "links": [
-      29
+      31
      ]
     }
    ],
@@ -886,7 +960,7 @@
    "widgets_values": []
   },
   {
-   "id": 20,
+   "id": 22,
    "type": "H3InjectSchedule",
    "pos": [
     1320,
@@ -903,7 +977,7 @@
     {
      "name": "model",
      "type": "MODEL",
-     "link": 27
+     "link": 29
     }
    ],
    "outputs": [
@@ -911,7 +985,7 @@
      "name": "SIGMAS",
      "type": "SIGMAS",
      "links": [
-      31
+      33
      ]
     }
    ],
@@ -926,11 +1000,11 @@
    ]
   },
   {
-   "id": 21,
+   "id": 23,
    "type": "RandomNoise",
    "pos": [
     60,
-    894
+    1040
    ],
    "size": [
     380,
@@ -945,7 +1019,7 @@
      "name": "NOISE",
      "type": "NOISE",
      "links": [
-      28
+      30
      ]
     }
    ],
@@ -958,7 +1032,7 @@
    ]
   },
   {
-   "id": 22,
+   "id": 24,
    "type": "SamplerCustomAdvanced",
    "pos": [
     3420,
@@ -975,27 +1049,27 @@
     {
      "name": "noise",
      "type": "NOISE",
-     "link": 28
+     "link": 30
     },
     {
      "name": "guider",
      "type": "GUIDER",
-     "link": 29
+     "link": 31
     },
     {
      "name": "sampler",
      "type": "SAMPLER",
-     "link": 30
+     "link": 32
     },
     {
      "name": "sigmas",
      "type": "SIGMAS",
-     "link": 31
+     "link": 33
     },
     {
      "name": "latent_image",
      "type": "LATENT",
-     "link": 32
+     "link": 34
     }
    ],
    "outputs": [
@@ -1003,7 +1077,7 @@
      "name": "output",
      "type": "LATENT",
      "links": [
-      33
+      35
      ]
     },
     {
@@ -1019,7 +1093,7 @@
    "title": "PASS 2: redraw fast spans (inject 0.5)"
   },
   {
-   "id": 23,
+   "id": 25,
    "type": "VAEDecode",
    "pos": [
     3840,
@@ -1036,12 +1110,12 @@
     {
      "name": "samples",
      "type": "LATENT",
-     "link": 33
+     "link": 35
     },
     {
      "name": "vae",
      "type": "VAE",
-     "link": 34
+     "link": 36
     }
    ],
    "outputs": [
@@ -1049,7 +1123,7 @@
      "name": "IMAGE",
      "type": "IMAGE",
      "links": [
-      35
+      37
      ]
     }
    ],
@@ -1059,7 +1133,7 @@
    "widgets_values": []
   },
   {
-   "id": 24,
+   "id": 26,
    "type": "H3ExactRecover",
    "pos": [
     4260,
@@ -1076,12 +1150,12 @@
     {
      "name": "images",
      "type": "IMAGE",
-     "link": 35
+     "link": 37
     },
     {
      "name": "hold_map",
      "type": "STRING",
-     "link": 36,
+     "link": 38,
      "widget": {
       "name": "hold_map"
      }
@@ -1092,9 +1166,9 @@
      "name": "IMAGE",
      "type": "IMAGE",
      "links": [
-      39,
-      42,
-      45
+      41,
+      44,
+      48
      ]
     }
    ],
@@ -1107,11 +1181,11 @@
    "title": "MAINodes: back to real time"
   },
   {
-   "id": 25,
+   "id": 27,
    "type": "DownloadAndLoadSAM2Model",
    "pos": [
     60,
-    1066
+    1212
    ],
    "size": [
     380,
@@ -1126,7 +1200,7 @@
      "name": "sam2_model",
      "type": "SAM2MODEL",
      "links": [
-      37
+      39
      ]
     }
    ],
@@ -1141,11 +1215,11 @@
    ]
   },
   {
-   "id": 26,
+   "id": 28,
    "type": "PrimitiveString",
    "pos": [
     60,
-    1290
+    1436
    ],
    "size": [
     380,
@@ -1160,7 +1234,7 @@
      "name": "STRING",
      "type": "STRING",
      "links": [
-      38
+      40
      ]
     }
    ],
@@ -1173,7 +1247,7 @@
    "title": "click points on the character (frame 0, PIXELS)"
   },
   {
-   "id": 27,
+   "id": 29,
    "type": "Sam2VideoSegmentationAddPoints",
    "pos": [
     4680,
@@ -1190,12 +1264,12 @@
     {
      "name": "sam2_model",
      "type": "SAM2MODEL",
-     "link": 37
+     "link": 39
     },
     {
      "name": "coordinates_positive",
      "type": "STRING",
-     "link": 38,
+     "link": 40,
      "widget": {
       "name": "coordinates_positive"
      }
@@ -1203,7 +1277,7 @@
     {
      "name": "image",
      "type": "IMAGE",
-     "link": 39
+     "link": 41
     },
     {
      "name": "prev_inference_state",
@@ -1216,14 +1290,14 @@
      "name": "sam2_model",
      "type": "SAM2MODEL",
      "links": [
-      40
+      42
      ]
     },
     {
      "name": "inference_state",
      "type": "SAM2INFERENCESTATE",
      "links": [
-      41
+      43
      ]
     }
    ],
@@ -1238,7 +1312,7 @@
    ]
   },
   {
-   "id": 28,
+   "id": 30,
    "type": "Sam2VideoSegmentation",
    "pos": [
     5100,
@@ -1255,12 +1329,12 @@
     {
      "name": "sam2_model",
      "type": "SAM2MODEL",
-     "link": 40
+     "link": 42
     },
     {
      "name": "inference_state",
      "type": "SAM2INFERENCESTATE",
-     "link": 41
+     "link": 43
     }
    ],
    "outputs": [
@@ -1268,7 +1342,7 @@
      "name": "mask",
      "type": "MASK",
      "links": [
-      43
+      45
      ]
     }
    ],
@@ -1280,7 +1354,7 @@
    ]
   },
   {
-   "id": 29,
+   "id": 31,
    "type": "AnimeCadenceCharacter",
    "pos": [
     5520,
@@ -1297,12 +1371,12 @@
     {
      "name": "images",
      "type": "IMAGE",
-     "link": 42
+     "link": 44
     },
     {
      "name": "masks",
      "type": "MASK",
-     "link": 43
+     "link": 45
     }
    ],
    "outputs": [
@@ -1310,7 +1384,7 @@
      "name": "images",
      "type": "IMAGE",
      "links": [
-      46
+      50
      ]
     },
     {
@@ -1331,7 +1405,7 @@
    "title": "ANIME CHARACTER CADENCE"
   },
   {
-   "id": 30,
+   "id": 32,
    "type": "VHS_VideoCombine",
    "pos": [
     2160,
@@ -1348,12 +1422,12 @@
     {
      "name": "images",
      "type": "IMAGE",
-     "link": 44
+     "link": 46
     },
     {
      "name": "audio",
      "type": "AUDIO",
-     "link": null
+     "link": 47
     },
     {
      "name": "meta_batch",
@@ -1395,7 +1469,7 @@
    }
   },
   {
-   "id": 31,
+   "id": 33,
    "type": "VHS_VideoCombine",
    "pos": [
     4680,
@@ -1412,12 +1486,12 @@
     {
      "name": "images",
      "type": "IMAGE",
-     "link": 45
+     "link": 48
     },
     {
      "name": "audio",
      "type": "AUDIO",
-     "link": null
+     "link": 49
     },
     {
      "name": "meta_batch",
@@ -1459,7 +1533,7 @@
    }
   },
   {
-   "id": 32,
+   "id": 34,
    "type": "VHS_VideoCombine",
    "pos": [
     5940,
@@ -1476,12 +1550,12 @@
     {
      "name": "images",
      "type": "IMAGE",
-     "link": 46
+     "link": 50
     },
     {
      "name": "audio",
      "type": "AUDIO",
-     "link": null
+     "link": 51
     },
     {
      "name": "meta_batch",
@@ -1523,7 +1597,7 @@
    }
   },
   {
-   "id": 33,
+   "id": 35,
    "type": "Note",
    "pos": [
     60,
@@ -1540,7 +1614,7 @@
    "outputs": [],
    "properties": {},
    "widgets_values": [
-    "06 FULL CHAIN: DE-ROPE + CHARACTER CADENCE\n\nRequires matlowai/ComfyUI-MAINodes (the de-rope = the real fix for fast-motion smear/melting) and kijai/ComfyUI-segment-anything-2.\nPass 1: normal H3. MAINodes finds spans that move too fast for H3's 4-frame latent tokens, slows them, pass 2 redraws them; settings follow MAINodes' recommended fast flow (turbo LoRA 0.8, 8-step schedule, inject 0.5 = kept pass-1 acting in our tests). Exact Recover drops the extra frames. The de-rope is MAINodes' work, used unmodified. Our part: SAM2 + Anime Cadence: Character Only put the character on 2s.\n~2x the time of a single render. Set the turbo LoRA to whichever H3 turbo LoRA you have."
+    "06 FULL CHAIN: DE-ROPE + CHARACTER CADENCE\n\nRequires matlowai/ComfyUI-MAINodes (the de-rope = the real fix for fast-motion smear/melting) and kijai/ComfyUI-segment-anything-2.\nPass 1: normal H3. MAINodes finds spans that move too fast for H3's 4-frame latent tokens, slows them, pass 2 redraws them; settings follow MAINodes' recommended fast flow (turbo LoRA 0.8, 8-step schedule, inject 0.5 = kept pass-1 acting in our tests). Exact Recover drops the extra frames, so pass 1's audio (used for all saves) stays in sync. The de-rope is MAINodes' work, used unmodified. Our part: SAM2 + Anime Cadence: Character Only put the character on 2s.\n~2x the time of a single render. Set the turbo LoRA to whichever H3 turbo LoRA you have."
    ]
   }
  ],
@@ -1653,93 +1727,93 @@
    14,
    10,
    0,
-   12,
+   13,
    0,
    "LATENT"
   ],
   [
    15,
-   11,
+   12,
    0,
    13,
+   1,
+   "VAE"
+  ],
+  [
+   16,
+   10,
+   0,
+   14,
+   0,
+   "LATENT"
+  ],
+  [
+   17,
+   11,
+   0,
+   15,
    0,
    "IMAGE"
   ],
   [
-   16,
-   12,
+   18,
+   14,
    0,
-   13,
+   15,
    1,
    "STRING"
   ],
   [
-   17,
-   13,
+   19,
+   15,
    0,
-   14,
+   16,
    0,
    "IMAGE"
   ],
   [
-   18,
+   20,
    3,
    0,
-   14,
+   16,
    1,
    "VAE"
   ],
   [
-   19,
-   14,
+   21,
+   16,
    0,
-   15,
+   17,
    0,
    "LATENT"
   ],
   [
-   20,
+   22,
    2,
    0,
-   16,
+   18,
    0,
    "CLIP"
   ],
   [
-   21,
+   23,
    3,
    0,
-   16,
+   18,
    1,
    "VAE"
   ],
   [
-   22,
-   13,
+   24,
+   15,
    2,
-   16,
+   18,
    2,
    "INT"
   ],
   [
-   23,
-   1,
-   0,
-   17,
-   0,
-   "MODEL"
-  ],
-  [
-   24,
-   17,
-   0,
-   18,
-   0,
-   "MODEL"
-  ],
-  [
    25,
-   18,
+   1,
    0,
    19,
    0,
@@ -1747,171 +1821,211 @@
   ],
   [
    26,
-   16,
-   0,
    19,
-   1,
-   "CONDITIONING"
-  ],
-  [
-   27,
-   18,
    0,
    20,
    0,
    "MODEL"
   ],
   [
-   28,
+   27,
+   20,
+   0,
    21,
    0,
+   "MODEL"
+  ],
+  [
+   28,
+   18,
+   0,
+   21,
+   1,
+   "CONDITIONING"
+  ],
+  [
+   29,
+   20,
+   0,
    22,
+   0,
+   "MODEL"
+  ],
+  [
+   30,
+   23,
+   0,
+   24,
    0,
    "NOISE"
   ],
   [
-   29,
-   19,
+   31,
+   21,
    0,
-   22,
+   24,
    1,
    "GUIDER"
   ],
   [
-   30,
+   32,
    8,
    0,
-   22,
+   24,
    2,
    "SAMPLER"
-  ],
-  [
-   31,
-   20,
-   0,
-   22,
-   3,
-   "SIGMAS"
-  ],
-  [
-   32,
-   15,
-   0,
-   22,
-   4,
-   "LATENT"
   ],
   [
    33,
    22,
    0,
-   23,
+   24,
+   3,
+   "SIGMAS"
+  ],
+  [
+   34,
+   17,
+   0,
+   24,
+   4,
+   "LATENT"
+  ],
+  [
+   35,
+   24,
+   0,
+   25,
    0,
    "LATENT"
   ],
   [
-   34,
+   36,
    3,
    0,
-   23,
+   25,
    1,
    "VAE"
-  ],
-  [
-   35,
-   23,
-   0,
-   24,
-   0,
-   "IMAGE"
-  ],
-  [
-   36,
-   13,
-   1,
-   24,
-   1,
-   "STRING"
   ],
   [
    37,
    25,
    0,
-   27,
+   26,
    0,
-   "SAM2MODEL"
+   "IMAGE"
   ],
   [
    38,
+   15,
+   1,
    26,
-   0,
-   27,
    1,
    "STRING"
   ],
   [
    39,
-   24,
-   0,
-   27,
-   2,
-   "IMAGE"
-  ],
-  [
-   40,
    27,
    0,
-   28,
+   29,
    0,
    "SAM2MODEL"
   ],
   [
-   41,
-   27,
-   1,
+   40,
    28,
+   0,
+   29,
+   1,
+   "STRING"
+  ],
+  [
+   41,
+   26,
+   0,
+   29,
+   2,
+   "IMAGE"
+  ],
+  [
+   42,
+   29,
+   0,
+   30,
+   0,
+   "SAM2MODEL"
+  ],
+  [
+   43,
+   29,
+   1,
+   30,
    1,
    "SAM2INFERENCESTATE"
   ],
   [
-   42,
-   24,
-   0,
-   29,
-   0,
-   "IMAGE"
-  ],
-  [
-   43,
-   28,
-   0,
-   29,
-   1,
-   "MASK"
-  ],
-  [
    44,
-   11,
-   0,
-   30,
-   0,
-   "IMAGE"
-  ],
-  [
-   45,
-   24,
+   26,
    0,
    31,
    0,
    "IMAGE"
   ],
   [
+   45,
+   30,
+   0,
+   31,
+   1,
+   "MASK"
+  ],
+  [
    46,
-   29,
+   11,
    0,
    32,
    0,
    "IMAGE"
+  ],
+  [
+   47,
+   13,
+   0,
+   32,
+   1,
+   "AUDIO"
+  ],
+  [
+   48,
+   26,
+   0,
+   33,
+   0,
+   "IMAGE"
+  ],
+  [
+   49,
+   13,
+   0,
+   33,
+   1,
+   "AUDIO"
+  ],
+  [
+   50,
+   31,
+   0,
+   34,
+   0,
+   "IMAGE"
+  ],
+  [
+   51,
+   13,
+   0,
+   34,
+   1,
+   "AUDIO"
   ]
  ],
  "groups": [],

@@ -1,6 +1,6 @@
 {
- "last_node_id": 15,
- "last_link_id": 16,
+ "last_node_id": 17,
+ "last_link_id": 20,
  "nodes": [
   {
    "id": 1,
@@ -388,7 +388,8 @@
      "name": "output",
      "type": "LATENT",
      "links": [
-      12
+      12,
+      14
      ]
     },
     {
@@ -433,8 +434,8 @@
      "name": "IMAGE",
      "type": "IMAGE",
      "links": [
-      14,
-      15
+      16,
+      18
      ]
     }
    ],
@@ -445,6 +446,78 @@
   },
   {
    "id": 12,
+   "type": "VAELoader",
+   "pos": [
+    60,
+    894
+   ],
+   "size": [
+    380,
+    106
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "VAE",
+     "type": "VAE",
+     "links": [
+      15
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "VAELoader"
+   },
+   "widgets_values": [
+    "minimax_h3_audio_vae_fp32.safetensors"
+   ]
+  },
+  {
+   "id": 13,
+   "type": "VAEDecodeAudio",
+   "pos": [
+    1740,
+    232
+   ],
+   "size": [
+    380,
+    132
+   ],
+   "flags": {},
+   "order": 4,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "samples",
+     "type": "LATENT",
+     "link": 14
+    },
+    {
+     "name": "vae",
+     "type": "VAE",
+     "link": 15
+    }
+   ],
+   "outputs": [
+    {
+     "name": "AUDIO",
+     "type": "AUDIO",
+     "links": [
+      17,
+      20
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "VAEDecodeAudio"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 14,
    "type": "VHS_VideoCombine",
    "pos": [
     2160,
@@ -461,12 +534,12 @@
     {
      "name": "images",
      "type": "IMAGE",
-     "link": 14
+     "link": 16
     },
     {
      "name": "audio",
      "type": "AUDIO",
-     "link": null
+     "link": 17
     },
     {
      "name": "meta_batch",
@@ -509,7 +582,7 @@
    "title": "save: raw H3"
   },
   {
-   "id": 13,
+   "id": 15,
    "type": "AnimeCadence",
    "pos": [
     2160,
@@ -526,7 +599,7 @@
     {
      "name": "images",
      "type": "IMAGE",
-     "link": 15
+     "link": 18
     }
    ],
    "outputs": [
@@ -534,7 +607,7 @@
      "name": "images",
      "type": "IMAGE",
      "links": [
-      16
+      19
      ]
     },
     {
@@ -562,7 +635,7 @@
    "title": "ANIME CADENCE"
   },
   {
-   "id": 14,
+   "id": 16,
    "type": "VHS_VideoCombine",
    "pos": [
     2580,
@@ -579,12 +652,12 @@
     {
      "name": "images",
      "type": "IMAGE",
-     "link": 16
+     "link": 19
     },
     {
      "name": "audio",
      "type": "AUDIO",
-     "link": null
+     "link": 20
     },
     {
      "name": "meta_batch",
@@ -627,7 +700,7 @@
    "title": "save: anime cadence"
   },
   {
-   "id": 15,
+   "id": 17,
    "type": "Note",
    "pos": [
     60,
@@ -755,27 +828,59 @@
   ],
   [
    14,
-   11,
+   10,
    0,
-   12,
+   13,
    0,
-   "IMAGE"
+   "LATENT"
   ],
   [
    15,
-   11,
+   12,
    0,
    13,
-   0,
-   "IMAGE"
+   1,
+   "VAE"
   ],
   [
    16,
-   13,
+   11,
    0,
    14,
    0,
    "IMAGE"
+  ],
+  [
+   17,
+   13,
+   0,
+   14,
+   1,
+   "AUDIO"
+  ],
+  [
+   18,
+   11,
+   0,
+   15,
+   0,
+   "IMAGE"
+  ],
+  [
+   19,
+   15,
+   0,
+   16,
+   0,
+   "IMAGE"
+  ],
+  [
+   20,
+   13,
+   0,
+   16,
+   1,
+   "AUDIO"
   ]
  ],
  "groups": [],

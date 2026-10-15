@@ -1,6 +1,6 @@
 {
- "last_node_id": 15,
- "last_link_id": 16,
+ "last_node_id": 17,
+ "last_link_id": 19,
  "nodes": [
   {
    "id": 1,
@@ -125,7 +125,7 @@
      "name": "MODEL",
      "type": "MODEL",
      "links": [
-      14
+      16
      ]
     }
    ],
@@ -387,7 +387,8 @@
      "name": "output",
      "type": "LATENT",
      "links": [
-      12
+      12,
+      14
      ]
     },
     {
@@ -432,7 +433,7 @@
      "name": "IMAGE",
      "type": "IMAGE",
      "links": [
-      15
+      17
      ]
     }
    ],
@@ -443,6 +444,77 @@
   },
   {
    "id": 12,
+   "type": "VAELoader",
+   "pos": [
+    60,
+    894
+   ],
+   "size": [
+    380,
+    106
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "VAE",
+     "type": "VAE",
+     "links": [
+      15
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "VAELoader"
+   },
+   "widgets_values": [
+    "minimax_h3_audio_vae_fp32.safetensors"
+   ]
+  },
+  {
+   "id": 13,
+   "type": "VAEDecodeAudio",
+   "pos": [
+    2160,
+    232
+   ],
+   "size": [
+    380,
+    132
+   ],
+   "flags": {},
+   "order": 5,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "samples",
+     "type": "LATENT",
+     "link": 14
+    },
+    {
+     "name": "vae",
+     "type": "VAE",
+     "link": 15
+    }
+   ],
+   "outputs": [
+    {
+     "name": "AUDIO",
+     "type": "AUDIO",
+     "links": [
+      19
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "VAEDecodeAudio"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 14,
    "type": "AnimeCadenceH3HoldGuide",
    "pos": [
     900,
@@ -459,7 +531,7 @@
     {
      "name": "model",
      "type": "MODEL",
-     "link": 14
+     "link": 16
     }
    ],
    "outputs": [
@@ -490,7 +562,7 @@
    "title": "ANIME HOLD GUIDE (experimental)"
   },
   {
-   "id": 13,
+   "id": 15,
    "type": "AnimeCadence",
    "pos": [
     2580,
@@ -507,7 +579,7 @@
     {
      "name": "images",
      "type": "IMAGE",
-     "link": 15
+     "link": 17
     }
    ],
    "outputs": [
@@ -515,7 +587,7 @@
      "name": "images",
      "type": "IMAGE",
      "links": [
-      16
+      18
      ]
     },
     {
@@ -542,7 +614,7 @@
    ]
   },
   {
-   "id": 14,
+   "id": 16,
    "type": "VHS_VideoCombine",
    "pos": [
     3000,
@@ -559,12 +631,12 @@
     {
      "name": "images",
      "type": "IMAGE",
-     "link": 16
+     "link": 18
     },
     {
      "name": "audio",
      "type": "AUDIO",
-     "link": null
+     "link": 19
     },
     {
      "name": "meta_batch",
@@ -606,7 +678,7 @@
    }
   },
   {
-   "id": 15,
+   "id": 17,
    "type": "Note",
    "pos": [
     60,
@@ -654,7 +726,7 @@
   ],
   [
    4,
-   12,
+   14,
    0,
    6,
    0,
@@ -670,7 +742,7 @@
   ],
   [
    6,
-   12,
+   14,
    0,
    9,
    0,
@@ -734,27 +806,51 @@
   ],
   [
    14,
+   10,
+   0,
+   13,
+   0,
+   "LATENT"
+  ],
+  [
+   15,
+   12,
+   0,
+   13,
+   1,
+   "VAE"
+  ],
+  [
+   16,
    4,
    0,
-   12,
+   14,
    0,
    "MODEL"
   ],
   [
-   15,
+   17,
    11,
    0,
-   13,
+   15,
    0,
    "IMAGE"
   ],
   [
-   16,
-   13,
+   18,
+   15,
    0,
-   14,
+   16,
    0,
    "IMAGE"
+  ],
+  [
+   19,
+   13,
+   0,
+   16,
+   1,
+   "AUDIO"
   ]
  ],
  "groups": [],
