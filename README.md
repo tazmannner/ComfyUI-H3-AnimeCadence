@@ -177,6 +177,9 @@ This work stands on other people's generosity. Big thanks to:
 - **madebyollin** for [taehv / taeh3](https://github.com/madebyollin/taehv), the tiny H3 VAE.
 - **Kosinkadink** for [ComfyUI-VideoHelperSuite](https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite) and
   the [ComfyUI](https://github.com/comfyanonymous/ComfyUI) team.
+- **[Claude](https://www.anthropic.com/claude) (Anthropic)**, via Claude Code, which wrote the nodes, tools
+  and example workflows, ran the experiments and comparisons behind the findings above, and put together
+  this repo, working from tazmannner's direction, testing and review.
 
 ## Credits and related work (details)
 
