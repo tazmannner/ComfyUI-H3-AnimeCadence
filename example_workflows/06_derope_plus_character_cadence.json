@@ -1540,7 +1540,7 @@
    "outputs": [],
    "properties": {},
    "widgets_values": [
-    "06 FULL CHAIN: DE-ROPE + CHARACTER CADENCE\n\nRequires matlowai/ComfyUI-MAINodes (the de-rope = the real fix for fast-motion smear/melting) and kijai/ComfyUI-segment-anything-2.\nPass 1: normal H3. MAINodes finds spans that move too fast for H3's 4-frame latent tokens, slows them, pass 2 redraws them (turbo LoRA 0.8, 8-step schedule, inject 0.5 = keeps pass-1 acting), Exact Recover drops the extra frames. Then SAM2 + Anime Character Cadence put the character on 2s.\n~2x the time of a single render. Set the turbo LoRA to whichever H3 turbo LoRA you have."
+    "06 FULL CHAIN: DE-ROPE + CHARACTER CADENCE\n\nRequires matlowai/ComfyUI-MAINodes (the de-rope = the real fix for fast-motion smear/melting) and kijai/ComfyUI-segment-anything-2.\nPass 1: normal H3. MAINodes finds spans that move too fast for H3's 4-frame latent tokens, slows them, pass 2 redraws them; settings follow MAINodes' recommended fast flow (turbo LoRA 0.8, 8-step schedule, inject 0.5 = kept pass-1 acting in our tests). Exact Recover drops the extra frames. The de-rope is MAINodes' work, used unmodified. Our part: SAM2 + Anime Cadence: Character Only put the character on 2s.\n~2x the time of a single render. Set the turbo LoRA to whichever H3 turbo LoRA you have."
    ]
   }
  ],

@@ -31,6 +31,17 @@ These nodes fix **timing**. Fast-motion **smearing/melting** is a different prob
 is the de-rope pipeline in [ComfyUI-MAINodes](https://github.com/matlowai/ComfyUI-MAINodes). Workflow 06
 chains the two.
 
+### What's ours, and what isn't
+
+- **Ours:** the five nodes in this repo (re-timing with auto 2s/3s detection and sharpest-frame pick,
+  character-only holds, the SAM tracker, the measure node, the experimental hold guide), the example
+  workflows, the demo/analysis tools, and the test results in "What we learned".
+- **Not ours:** the de-rope that fixes smearing is **MAINodes** (matlowai), used unmodified in workflow 06,
+  with settings that follow MAINodes' own recommended fast flow. The framing of the problem, cadence as the
+  thing video models get wrong and the way we measure it, comes from **Alvdansen Labs' "Animating on Twos"**.
+  Masks come from **SAM / SAM2** (Meta, via Kijai's nodes), the tiny VAE from **madebyollin**, the video
+  model from **MiniMax**. Holding drawings on 2s/3s is ordinary animation practice. See [Thank you](#thank-you).
+
 ---
 
 ## Nodes
@@ -89,10 +100,12 @@ one click as a fraction of the frame, uses the SAM v1 checkpoint in `models/sams
 *1 raw | 2 character-only hold | 3 MAINodes de-rope | 4 de-rope + character-only hold.*
 ([mp4](assets/demo_derope_plus_character_cadence.mp4))
 
-Pass 1 is a normal H3 render. MAINodes finds spans that move too fast for H3's 4-frame latent tokens
-(that's what smears and melts), slows them down, and pass 2 redraws them (we use a turbo LoRA at 0.8,
-8-step schedule, `inject 0.5`, which keeps pass 1's acting). Exact Recover returns to real time, then
-SAM2 + Anime Cadence: Character Only put the character on 2s. About 2× the time of a single render.
+This part is **MAINodes' de-rope pipeline**, used as published. Pass 1 is a normal H3 render. MAINodes
+finds spans that move too fast for H3's 4-frame latent tokens (their explanation of why H3 smears), slows
+them down, and pass 2 redraws them. The settings follow MAINodes' recommended fast flow (turbo LoRA on
+pass 2; we used 0.8 strength, an 8-step schedule and `inject 0.5`, which kept pass 1's acting in our tests).
+Exact Recover returns to real time. Our part is the last step: SAM2 + Anime Cadence: Character Only put
+the character on 2s. About 2× the time of a single render.
 
 ### H3 Hold Guide (experimental)
 
@@ -123,8 +136,9 @@ Restart ComfyUI. Core nodes need nothing beyond ComfyUI. Optional, per workflow:
 
 ## What we learned testing H3
 
-- **H3's VAE keeps twos.** Real on-twos anime survives H3's encode→decode almost perfectly, so the
-  every-frame motion comes from the generator, not the latent format.
+- **H3's VAE keeps twos.** The Animating on Twos paper lists this as an open risk; in our measurement real
+  on-twos anime survived H3's encode→decode almost perfectly, so the every-frame motion comes from the
+  generator, not the latent format.
 - **"2d anime style" switches on anime timing.** Same prompt/seed without style words, H3 renders live
   action and changes every frame. With them, characters go on 2s. A LoRA trained on *still images* changes
   the look, not the timing.
@@ -134,16 +148,17 @@ Restart ComfyUI. Core nodes need nothing beyond ComfyUI. Optional, per workflow:
   ![static camera: H3 already on 2s](assets/demo_static_camera_already_on_2s.gif)
 
 - **A LoRA trained on real anime clips (native 24 fps) learns the timing itself**: in our test it was
-  ~98% on twos for the whole frame, and these nodes had nothing to fix. The nodes matter most for plain H3
+  ~98% on twos for the whole frame, and these nodes had nothing to fix. This agrees with the Animating on
+  Twos paper's case that fine-tuning on real cadence is the real fix. The nodes matter most for plain H3
   and image-trained style LoRAs.
 - **Never resample anime training clips to 25/30 fps.** Duplicated frames break the 2/3 pattern.
-- **Smear/melting is a different problem from timing.** MAINodes' de-rope fixes it; on our hardest prompts it
-  turned melted bodies and white smears back into readable drawings.
+- **Smear/melting is a different problem from timing.** MAINodes' de-rope fixes it (their work, not ours); on
+  our hardest prompts it turned melted bodies and white smears back into readable drawings.
 
 ## Tools (no ComfyUI needed)
 
 - `tools/cadence_analyze.py clip.mp4` measures a clip's cadence (1s/2s/3s histogram, per-tile, optional
-  camera-pan compensation).
+  camera-pan compensation). The measurement method follows Appendix C of the Animating on Twos paper.
 - `tools/showcase.py out.mp4 raw.mp4 retimed.mp4 [--realtime-only]` makes the side-by-side demo with the
   drawing-change ticker used in the GIFs above.
 
