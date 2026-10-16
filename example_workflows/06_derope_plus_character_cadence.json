@@ -1255,7 +1255,7 @@
    ],
    "size": [
     380,
-    288
+    262
    ],
    "flags": {},
    "order": 11,
@@ -1269,15 +1269,17 @@
     {
      "name": "coordinates_positive",
      "type": "STRING",
-     "link": 40,
-     "widget": {
-      "name": "coordinates_positive"
-     }
+     "link": 40
     },
     {
      "name": "image",
      "type": "IMAGE",
      "link": 41
+    },
+    {
+     "name": "coordinates_negative",
+     "type": "STRING",
+     "link": null
     },
     {
      "name": "prev_inference_state",
@@ -1305,10 +1307,8 @@
     "Node name for S&R": "Sam2VideoSegmentationAddPoints"
    },
    "widgets_values": [
-    "",
     0,
-    0,
-    null
+    0
    ]
   },
   {
@@ -1473,7 +1473,7 @@
    "type": "VHS_VideoCombine",
    "pos": [
     4680,
-    388
+    362
    ],
    "size": [
     380,

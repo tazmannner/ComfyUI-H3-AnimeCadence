@@ -144,7 +144,7 @@
    ],
    "size": [
     380,
-    288
+    262
    ],
    "flags": {},
    "order": 1,
@@ -158,15 +158,17 @@
     {
      "name": "coordinates_positive",
      "type": "STRING",
-     "link": 2,
-     "widget": {
-      "name": "coordinates_positive"
-     }
+     "link": 2
     },
     {
      "name": "image",
      "type": "IMAGE",
      "link": 3
+    },
+    {
+     "name": "coordinates_negative",
+     "type": "STRING",
+     "link": null
     },
     {
      "name": "prev_inference_state",
@@ -194,10 +196,8 @@
     "Node name for S&R": "Sam2VideoSegmentationAddPoints"
    },
    "widgets_values": [
-    "",
     0,
-    0,
-    null
+    0
    ]
   },
   {

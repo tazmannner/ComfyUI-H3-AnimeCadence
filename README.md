@@ -53,6 +53,10 @@ chains the two (07 without SAM).
 | **Character Mask Track (SAM)** | per-frame character mask from one click, using the original Segment Anything (SAM v1) | [04](example_workflows/04_character_cadence_sam_v1.json) |
 | **Anime Cadence: Measure** | prints how much of a clip is on 1s / 2s / 3s | [01](example_workflows/01_anime_cadence_on_a_clip.json) |
 | **H3 Hold Guide** *(experimental)* | in-sampler nudge toward held drawings via the tiny taeh3 VAE | [05](example_workflows/05_hold_guide_experimental.json) |
+| **H3 Window Attention** | temporal window attention for the long de-rope pass: ~40% faster pass 2, fast poses stay crisp | [08](example_workflows/08_fast_derope_plus_anime_cadence.json) |
+| **Motion Gate** + **Segment Splice** | de-rope only sustained extreme motion: measures pass 1 with optical flow, redraws just the burst and splices it back; calm clips skip pass 2 | [08](example_workflows/08_fast_derope_plus_anime_cadence.json) |
+| **Scout Sigmas** *(experimental)* | stops a sampler early at a target sigma (for experiments; not used by 08) | |
+| **Load TAE as VAE (taeh3)** | loads a tiny video autoencoder from `models/vae_approx` as a normal VAE for VAEEncode/VAEDecode | [08](example_workflows/08_fast_derope_plus_anime_cadence.json) |
 
 Drag any `.json` from [`example_workflows/`](example_workflows/) onto the ComfyUI canvas (they also
 show up in ComfyUI's template browser under this pack).
@@ -108,6 +112,41 @@ Exact Recover returns to real time. Our part is the last step: in **06**, SAM2 +
 Only put the character on 2s; **07** is the simpler version with no SAM, where Anime Cadence holds the whole
 frame (best when the camera is mostly still). About 2× the time of a single render.
 
+### Fast de-rope (workflow 08): same fix, extra cost roughly halved
+
+**Why H3 smears**: we tested it directly. H3's VAE round-trips crisp fast poses at normal 24 fps almost
+losslessly, so one latent token *can* hold four distinct fast poses. It's the DiT that paints the blur: it
+re-smears even a clean clip when re-rendering it at normal speed. In mostly live-action training data, fast
+motion inside a latent token comes with motion blur. The de-rope's frame holds give each fast pose its own
+static token, which is why it works.
+
+**Where the de-rope's cost goes**: the slowed clip is 2.3-3.3x longer, and full attention grows with the
+square of its length, so pass 2 costs 5-8x a normal step.
+
+**H3 Window Attention** (this pack) fixes that for the de-rope pass. Each video frame attends exactly to its
+neighbours (±4 latent frames), every 8th frame as an anchor, and all text/audio/first-frame rows. Text and
+audio still attend to everything. Pass 2 runs about 40% faster, and in our tests fast poses came out as crisp
+as with full attention or crisper; long-range attention seems to average fast poses together. It is not a
+one-pass fix: from step 0 of a normal render it just gives a different take. It needs the de-rope's init.
+
+Also in 08: taeh3 (*Load TAE as VAE*) does the throwaway decode and the encode of the slowed clip
+(34 s -> 2 s), and the int8 video VAE does the final decode. Pass 1 and its audio are a normal render.
+
+**Motion Gate: de-rope only where it's needed.** MAINodes' Jerk Oracle ranks motion against the clip itself, so it
+always slows the fastest ~25% of every clip, including talking heads and shot cuts. In our tests that made redrawn
+mouths look off. *Motion Gate* measures motion in absolute terms instead: optical flow on the pass-1 frames, with
+camera pans removed, summed over 4-frame windows (one H3 latent token). Only motion above 0.09 frame widths per window,
+lasting at least 5 windows, counts. Isolated whole-frame changes are treated as shot cuts and ignored; clustered ones
+(explosions, flashes) count as action. Inside those spans the oracle's own slow-down is used. The burst plus 12-frame
+handles is redrawn and *Segment Splice* crossfades it back into the full-quality pass-1 render. If nothing is extreme,
+the splice never requests pass 2, so it doesn't run. Calibrated on 13 clips: dialogue and dance never trigger it;
+punches, crashes, sword fights and falls trigger on their bursts. Known miss: a brief flash-melt with little sustained
+motion.
+
+Measured on an RTX 5090, 1024x576x124: Re:Zero i2v 246 s -> 167 s, sword-fight prompt 231 s -> 158 s
+(a plain render is ~100 s); with the Motion Gate a calm dialogue clip costs the same as a plain render, and a 15 s fight at 1 MP cost 1.19x. Same choreography and the same smear fixes as 07 on Edgerunners, Re:Zero, Teen
+Titans and Golden Boy test clips.
+
 ### H3 Hold Guide (experimental)
 
 Each sampling step the predicted video is decoded with the tiny **taeh3** VAE, held on the 2s/3s the model
@@ -132,7 +171,8 @@ Restart ComfyUI. Core nodes need nothing beyond ComfyUI. Optional, per workflow:
 | workflows 02, 05, 06 | MiniMax H3 models in ComfyUI: `minimax_h3_fl2va_pruned_int8_convrot`, `qwen3vl_32b_minimax_h3_*`, `minimax_h3_video_vae_fp16` (see [Comfy-Org/MiniMax-H3](https://huggingface.co/Comfy-Org/MiniMax-H3)) |
 | workflows 03, 06 (SAM2 masks) | [kijai/ComfyUI-segment-anything-2](https://github.com/kijai/ComfyUI-segment-anything-2) (downloads `sam2.1_hiera_base_plus`, ~160 MB, on first run) |
 | workflow 04 (Character Mask Track) | `pip install segment-anything` and a SAM v1 checkpoint (e.g. `sam_vit_b_01ec64.pth`) in `models/sams` |
-| workflow 05 (Hold Guide) | `taeh3.safetensors` from [madebyollin/taehv](https://github.com/madebyollin/taehv) in `models/vae_approx` (needs the version with an encoder) |
+| workflow 08 (Motion Gate) | OpenCV (`pip install opencv-python-headless`; most ComfyUI installs already have it) |
+| workflows 05, 08 (Hold Guide, fast de-rope) | `taeh3.safetensors` from [madebyollin/taehv](https://github.com/madebyollin/taehv) in `models/vae_approx` (needs the version with an encoder) |
 | workflows 06, 07 (de-rope) | [matlowai/ComfyUI-MAINodes](https://github.com/matlowai/ComfyUI-MAINodes) + any H3 turbo LoRA |
 
 ## What we learned testing H3

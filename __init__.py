@@ -10,6 +10,9 @@ if "sams" not in folder_paths.folder_names_and_paths:
 from .cadence import AnimeCadence, AnimeCadenceMeasure
 from .hold_guide import AnimeCadenceH3HoldGuide
 from .character_cadence import AnimeCadenceMaskTrack, AnimeCadenceCharacter
+from .fast_derope import AnimeCadenceTAELoader, AnimeCadenceScoutSigmas
+from .window_attention import AnimeCadenceWindowAttention
+from .motion_gate import AnimeCadenceMotionGate, AnimeCadenceSegmentSplice
 
 NODE_CLASS_MAPPINGS = {
     "AnimeCadence": AnimeCadence,
@@ -17,6 +20,11 @@ NODE_CLASS_MAPPINGS = {
     "AnimeCadenceH3HoldGuide": AnimeCadenceH3HoldGuide,
     "AnimeCadenceMaskTrack": AnimeCadenceMaskTrack,
     "AnimeCadenceCharacter": AnimeCadenceCharacter,
+    "AnimeCadenceTAELoader": AnimeCadenceTAELoader,
+    "AnimeCadenceScoutSigmas": AnimeCadenceScoutSigmas,
+    "AnimeCadenceWindowAttention": AnimeCadenceWindowAttention,
+    "AnimeCadenceMotionGate": AnimeCadenceMotionGate,
+    "AnimeCadenceSegmentSplice": AnimeCadenceSegmentSplice,
 }
 NODE_DISPLAY_NAME_MAPPINGS = {
     "AnimeCadence": "Anime Cadence: Hold on 2s/3s",
@@ -24,6 +32,11 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "AnimeCadenceH3HoldGuide": "H3 Hold Guide (experimental)",
     "AnimeCadenceMaskTrack": "Character Mask Track (SAM)",
     "AnimeCadenceCharacter": "Anime Cadence: Character Only",
+    "AnimeCadenceTAELoader": "Load TAE as VAE (taeh3)",
+    "AnimeCadenceScoutSigmas": "Scout Sigmas (stop pass 1 early for de-rope)",
+    "AnimeCadenceWindowAttention": "H3 Window Attention (cheap de-rope pass)",
+    "AnimeCadenceMotionGate": "Motion Gate (de-rope only extreme motion)",
+    "AnimeCadenceSegmentSplice": "Segment Splice (skip pass 2 if calm)",
 }
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]
