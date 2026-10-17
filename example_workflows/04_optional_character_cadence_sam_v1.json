@@ -242,7 +242,7 @@
    "outputs": [],
    "properties": {},
    "widgets_values": [
-    "04 CHARACTER-ONLY CADENCE (SAM v1, no SAM2 needed)\n\nAnime SAM Track uses the original Segment Anything checkpoint in models/sams (e.g. sam_vit_b_01ec64.pth, as used by Impact Pack) and tracks the character frame to frame from one click.\nclick_x / click_y = position of the character in frame 0 as FRACTIONS of width/height (0.5, 0.5 = centre).\nSAM2 (workflow 03) gives cleaner masks and is faster; this one avoids the extra dependency."
+    "04 OPTIONAL: CHARACTER-ONLY CADENCE WITH SAM v1 (needs pip install segment-anything)\n\nAnime SAM Track uses the original Segment Anything checkpoint in models/sams (e.g. sam_vit_b_01ec64.pth, as used by Impact Pack) and tracks the character frame to frame from one click.\nclick_x / click_y = position of the character in frame 0 as FRACTIONS of width/height (0.5, 0.5 = centre).\nSAM2 (workflow 03) gives cleaner masks and is faster; this one avoids the extra dependency."
    ]
   }
  ],

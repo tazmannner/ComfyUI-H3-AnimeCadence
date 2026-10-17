@@ -1,7 +1,7 @@
 [project]
 name = "comfyui-h3-animecadence"
-description = "Anime timing for MiniMax H3 video: re-time onto 2s/3s, character-only holds (SAM/SAM2), and a faster, motion-gated de-rope (window attention, taeh3, Motion Gate) for fast-motion smear."
-version = "0.2.0"
+description = "Anime timing for MiniMax H3 video: re-time onto 2s/3s (auto-detects the hold H3 chose, keeps the sharpest drawing), character-only holds with any mask (SAM optional), experimental in-sampler hold guide."
+version = "0.3.0"
 license = { file = "LICENSE" }
 dependencies = []
 
@@ -10,7 +10,6 @@ Repository = "https://github.com/tazmannner/ComfyUI-H3-AnimeCadence"
 
 [project.optional-dependencies]
 sam = ["segment-anything"]
-gate = ["opencv-python-headless"]
 
 [tool.comfy]
 PublisherId = "tazmannner"

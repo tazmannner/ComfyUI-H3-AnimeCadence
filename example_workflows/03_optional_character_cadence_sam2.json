@@ -475,7 +475,7 @@
    "outputs": [],
    "properties": {},
    "widgets_values": [
-    "03 CHARACTER-ONLY CADENCE (SAM2)\n\nHolds only the character on 2s/3s while the background/camera keep moving every frame, like real anime (cels on 2s, background slides on ones).\n1. Load a clip.\n2. Put 2-3 points on the character in frame 0 as PIXEL coordinates JSON [{\"x\":..,\"y\":..}].\n3. SAM2 (kijai/ComfyUI-segment-anything-2, sam2.1_hiera_base_plus ~160 MB, auto-downloads on first run) tracks them.\ngrow/feather: soft edge around the character; raise feather if you see a seam on fast camera moves."
+    "03 OPTIONAL: CHARACTER-ONLY CADENCE WITH SAM2\n\nOptional extra; the default is workflow 01/02 (whole frame, no masks). Holds only the character on 2s/3s while the background/camera keep moving every frame, like real anime (cels on 2s, background slides on ones).\n1. Load a clip.\n2. Put 2-3 points on the character in frame 0 as PIXEL coordinates JSON [{\"x\":..,\"y\":..}].\n3. SAM2 (kijai/ComfyUI-segment-anything-2, sam2.1_hiera_base_plus ~160 MB, auto-downloads on first run) tracks them.\ngrow/feather: soft edge around the character; raise feather if you see a seam on fast camera moves."
    ]
   }
  ],

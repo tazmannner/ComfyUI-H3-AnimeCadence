@@ -41,7 +41,7 @@ class AnimeCadenceH3HoldGuide:
 
     RETURN_TYPES = ("MODEL",)
     FUNCTION = "patch"
-    CATEGORY = "AnimeCadence"
+    CATEGORY = "AnimeCadence/experimental"
 
     _tae_cache = {}
 

@@ -1,42 +1,36 @@
-"""ComfyUI-H3-AnimeCadence: experiments for making MiniMax H3 animate like hand-drawn anime
-(cadence on twos/threes, less smear/morph distortion in 2D motion)."""
-import os
-import folder_paths
+"""ComfyUI-H3-AnimeCadence: make MiniMax H3 video move like hand-drawn anime, animated on 2s/3s.
 
-# SAM v1 checkpoints live in models/sams (same folder Impact Pack uses); register it if nobody else did
-if "sams" not in folder_paths.folder_names_and_paths:
-    folder_paths.add_model_folder_path("sams", os.path.join(folder_paths.models_dir, "sams"))
+Core:          Anime Cadence (hold on 2s/3s), Measure, Character Only (any mask)
+Optional:      Character Mask Track (SAM v1) -- only registered when `segment-anything` is installed
+Experimental:  H3 Hold Guide (in-sampler nudge)
+Fast-motion smear (de-rope) lives in its own pack: ComfyUI-H3-FastDerope."""
+import importlib.util
+import logging
 
 from .cadence import AnimeCadence, AnimeCadenceMeasure
+from .character_cadence import AnimeCadenceCharacter
 from .hold_guide import AnimeCadenceH3HoldGuide
-from .character_cadence import AnimeCadenceMaskTrack, AnimeCadenceCharacter
-from .fast_derope import AnimeCadenceTAELoader, AnimeCadenceScoutSigmas
-from .window_attention import AnimeCadenceWindowAttention
-from .motion_gate import AnimeCadenceMotionGate, AnimeCadenceSegmentSplice
 
 NODE_CLASS_MAPPINGS = {
     "AnimeCadence": AnimeCadence,
     "AnimeCadenceMeasure": AnimeCadenceMeasure,
-    "AnimeCadenceH3HoldGuide": AnimeCadenceH3HoldGuide,
-    "AnimeCadenceMaskTrack": AnimeCadenceMaskTrack,
     "AnimeCadenceCharacter": AnimeCadenceCharacter,
-    "AnimeCadenceTAELoader": AnimeCadenceTAELoader,
-    "AnimeCadenceScoutSigmas": AnimeCadenceScoutSigmas,
-    "AnimeCadenceWindowAttention": AnimeCadenceWindowAttention,
-    "AnimeCadenceMotionGate": AnimeCadenceMotionGate,
-    "AnimeCadenceSegmentSplice": AnimeCadenceSegmentSplice,
+    "AnimeCadenceH3HoldGuide": AnimeCadenceH3HoldGuide,
 }
 NODE_DISPLAY_NAME_MAPPINGS = {
     "AnimeCadence": "Anime Cadence: Hold on 2s/3s",
     "AnimeCadenceMeasure": "Anime Cadence: Measure",
-    "AnimeCadenceH3HoldGuide": "H3 Hold Guide (experimental)",
-    "AnimeCadenceMaskTrack": "Character Mask Track (SAM)",
     "AnimeCadenceCharacter": "Anime Cadence: Character Only",
-    "AnimeCadenceTAELoader": "Load TAE as VAE (taeh3)",
-    "AnimeCadenceScoutSigmas": "Scout Sigmas (stop pass 1 early for de-rope)",
-    "AnimeCadenceWindowAttention": "H3 Window Attention (cheap de-rope pass)",
-    "AnimeCadenceMotionGate": "Motion Gate (de-rope only extreme motion)",
-    "AnimeCadenceSegmentSplice": "Segment Splice (skip pass 2 if calm)",
+    "AnimeCadenceH3HoldGuide": "H3 Hold Guide (experimental)",
 }
+
+# optional SAM v1 tracker: no hard dependency on segment-anything
+if importlib.util.find_spec("segment_anything") is not None:
+    from .sam_track import AnimeCadenceMaskTrack
+    NODE_CLASS_MAPPINGS["AnimeCadenceMaskTrack"] = AnimeCadenceMaskTrack
+    NODE_DISPLAY_NAME_MAPPINGS["AnimeCadenceMaskTrack"] = "Character Mask Track (SAM, optional)"
+else:
+    logging.info("AnimeCadence: segment-anything not installed; the optional Character Mask Track (SAM) node is "
+                 "disabled. Character Only works with any mask (e.g. SAM2 nodes).")
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]
